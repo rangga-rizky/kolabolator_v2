@@ -4,7 +4,7 @@ const passport = require("passport");
 const Notification = require("../../models/Notification");
 const Project = require("../../models/Project");
 const Member = require("../../models/Member");
-const validateMemberInput = require("../../validation/Member");
+const validateMemberInput = require("../../validation/member");
 
 
 // @desc request member
