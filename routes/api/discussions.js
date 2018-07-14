@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const Discussion = require("../../models/Discussion");
 const Comment = require("../../models/Comment");
-const validateDiscussionInput = require("../../validation/Discussion");
+const validateDiscussionInput = require("../../validation/discussion");
 const validateCommentInput = require("../../validation/comment");
 
 
