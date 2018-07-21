@@ -1,7 +1,6 @@
+# kolabolator_v2
 Platform untuk saling berkolaborasi, Single Page apps with MEAN Stack.
 
-# kolabolator_v2
-using laravel+vueJS to create SPA
 
 ![Alt Text](create-project.gif)
 
