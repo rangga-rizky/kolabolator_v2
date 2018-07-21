@@ -22,7 +22,7 @@ export default function(state = initialState,action){
         case NOTIFICATION_LOADING:
             return {
                 ...state,
-                laoding:true
+                loading:true
             }  
         default:
             return state;

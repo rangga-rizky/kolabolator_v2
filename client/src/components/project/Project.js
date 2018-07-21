@@ -22,7 +22,7 @@ class Project extends Component {
     } else {
       projectContent = (
         <div>
-        <ProjectHeader project={project.project} isMember={project.isMember} isWaitingAccepted={project.isWaitingAccepted}/>        
+        <ProjectHeader project={project.project} isMember={project.isMember} isOwner={project.isOwner} isWaitingAccepted={project.isWaitingAccepted}/>        
           {project.isMember ? (
               <DiscussionForm project_id={project.project._id}/> 
               )

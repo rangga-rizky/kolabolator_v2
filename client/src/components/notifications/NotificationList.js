@@ -13,7 +13,6 @@ class NotificationList extends Component {
   render() {
     const { unreadNotifications } = this.props.notification;
     let notifContent;
-    console.log(unreadNotifications);
     if(unreadNotifications != null){
       notifContent = unreadNotifications.map(notif =>
          <Notification key={notif._id}

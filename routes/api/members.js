@@ -27,6 +27,7 @@ router.post("/request",passport.authenticate("jwt",{session:false}),(req,res) =>
                 data:{
                     project_name:project.title,
                     project_id:project.id,
+                    member_id:member.id,
                     by:req.user.name
                 }
             });  
@@ -67,7 +68,8 @@ router.post("/invite",passport.authenticate("jwt",{session:false}),(req,res) => 
                             data:{
                                 project_name:project.title,
                                 project_id:project.id,
-                                by:req.user.name
+                                by:req.user.name,
+                                member_id:member.id
                             }
                         });  
                         notif.save()
@@ -92,8 +94,15 @@ router.post("/request/accept",passport.authenticate("jwt",{session:false}),(req,
                 return res.status(401).json(errors);
             }         
             member.status ="ACCEPTED";
-            member.save().then(member => {
-                return res.json(member);
+            member.save().then(member => {                
+                project.member.unshift({user:member.user});
+                project.save();
+                Notification.findByIdAndUpdate(
+                    req.body.notification_id, 
+                    {isRead:true},        
+                ).then(notif =>{
+                    return res.json(member);
+                })
             }).catch(err => console.log(err))
         }).catch(err => {
             errors.notfound = "project tidak ditemukan";
@@ -105,6 +114,28 @@ router.post("/request/accept",passport.authenticate("jwt",{session:false}),(req,
     })
 });
 
+// @desc accept invitation member
+router.post("/invite/accept",passport.authenticate("jwt",{session:false}),(req,res) => {    
+    const errors = {};
+    Member.findById(req.body.id).then(member =>{      
+        member.status ="ACCEPTED";
+        member.save().then(member => {
+            Project.findById(member.project).then(project =>{
+                project.member.unshift({user:member.user});
+                project.save();
+                Notification.findByIdAndUpdate(
+                    req.body.notification_id, 
+                    {isRead:true},        
+                ).then(notif =>{
+                    return res.json(member);
+                })
+            })
+        }).catch(err => console.log(err))    
+    }).catch(err => {
+        errors.notfound = "member tidak ditemukan";
+        return res.status(404).json(errors);
+    })
+});
 
 
 module.exports = router;

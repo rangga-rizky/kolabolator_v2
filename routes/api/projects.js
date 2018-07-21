@@ -51,7 +51,7 @@ router.get("/",passport.authenticate("jwt",{session:false}),(req,res) => {
 router.get("/:id",passport.authenticate("jwt",{session:false}),(req,res) => {
     Project.findById(req.params.id).populate('user',['name','avatar','userType'])
         .then(project => {
-            if(project.user.id == req.user.id || project.member.indexOf(req.user.id) != -1){                
+            if(project.member.map(item => item.user.toString()).indexOf(req.user.id) != -1){                
                 Discussion.find({project:project.id})
                 .then(discussion => {
                     res.json({
@@ -61,6 +61,16 @@ router.get("/:id",passport.authenticate("jwt",{session:false}),(req,res) => {
                     })
                 })
             .catch(err=> console.log(err))
+            }else if(project.user.id == req.user.id){
+                Discussion.find({project:project.id})
+                .then(discussion => {
+                    res.json({
+                        project:project,
+                        isMember:true,
+                        isOwner:true,
+                        discussion:discussion
+                    })
+                })
             }else{
                 Member.find({project:req.params.id,user:req.user.id,status:"REQUEST"})
                  .then(member => {
@@ -91,10 +101,11 @@ router.get("/:id",passport.authenticate("jwt",{session:false}),(req,res) => {
 router.get("/:id/nonmembers",passport.authenticate("jwt",{session:false}),(req,res) => {    
     Project.findById(req.params.id).populate('user',['name','avatar','userType'])
     .then(project => {
-        let member = project.member
-        member.push(req.user.id);
-        User.where("_id").nin(member)
-            .then(users =>    res.json(users))
+        let members = project.member.map(member => member.user);
+        members.push(project.user);
+        console.log(members);
+        User.where("_id").nin(members)
+            .then(users =>  res.json(users))
             .catch(err  => cosnole.log(err))
     }).catch(err=>{
         console.log(err);

@@ -45,7 +45,7 @@ class ProjectHeader extends Component {
   }
 
   render() {
-    const { project, auth, isMember } = this.props;
+    const { project, auth, isMember ,isOwner } = this.props;
     const {pending,isWaitingAccepted } = this.state;
     return (
         <div className="card card-body mb-3">
@@ -79,17 +79,15 @@ class ProjectHeader extends Component {
             <p>{project.text}</p>
             {isMember ? (
               <span>
-                {project.user._id === auth.user.id ? (
-                  <div>
+                <div>
                   <Link to={`/projects/${project._id}/invite`} className="btn btn-success">
                   <i className="fa fa-user"></i> {' '}
                    Undang Kolabolator
                   </Link>{' '}
-                  <button className="btn btn-danger">
+                  {project.user._id === auth.user.id &&<button className="btn btn-danger">
                   Close Project
-                    </button>
+                    </button>}
                     </div>
-                ) : null}
               </span>
             ) : (
                 <span>
