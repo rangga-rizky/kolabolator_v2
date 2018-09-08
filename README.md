@@ -1,5 +1,5 @@
 # kolabolator_v2
-Platform untuk saling berkolaborasi, Single Page apps with MEAN Stack.
+Platform untuk saling berkolaborasi, Single Page apps with MERN(Mongo - Express - React - Node) Stack.
 
 
 ![Alt Text](create-project.gif)
